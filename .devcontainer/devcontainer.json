@@ -1,0 +1,46 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/java-postgres
+{
+	"name": "Spring and Angular",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "app",
+	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+	"features": {
+		"ghcr.io/devcontainers/features/node:1": {
+			"nodeGypDependencies": true,
+			"version": "18",
+			"nvmVersion": "latest"
+		}
+	},
+	
+	// install the Angular CLI, and install or upgrade schema after start
+	// unlike the Maven repository volume, we did not specify a volume for the global node cache. The download time on each start demonstrates why you may want to create a volume for your
+	// package managers. However, volumes stick around after you delete a container, so developers should remove volumes with `docker volume prune --all` after leaving a project.
+	"postStartCommand": "npm install -g @angular/cli@17.0.6 && mvn -f backend/pom.xml flyway:migrate",
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// This can be used to network with other containers or with the host.
+	"forwardPorts": [8080, 4200],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "java -version",
+
+	// Configure tool-specific properties.
+	"customizations": {
+        // Configure properties specific to VS Code.
+        "vscode": {
+            // Set *default* container specific settings.json values on container create.
+            "settings": {},
+            // Add the IDs of extensions you want installed when the container is created.
+            "extensions": [
+                "vscjava.vscode-java-pack",
+				"loiane.angular-extension-pack",
+				// to format pom
+				"redhat.vscode-xml"
+            ]
+        }
+    },
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}

@@ -1,0 +1,14 @@
+<h1>Nolan Movies</h1>
+
+<table>
+  <tr>
+    <th>Title</th>
+    <th>Release Year</th>
+  </tr>
+  @for (movie of movies$ | async; track movie.id) {
+  <tr>
+    <td>{{movie.title}}</td>
+    <td>{{movie.releaseYear}}</td>
+  </tr>
+  }
+</table>
