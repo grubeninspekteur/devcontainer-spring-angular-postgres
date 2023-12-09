@@ -2,8 +2,16 @@ version: '3.8'
 
 volumes:
   postgres-data:
-  # cache maven repository so we do not have to redownload every time we restart the container
+  # Reuse Maven repository and NPM cache through volumes.
+  # This caching is not ideal. While it keeps the caches between container rebuilds, it still means
+  # that different dev containers get different volumes (the volume name is localized to the compose file),
+  # leading to duplicated downloads. This can be mitigated through various means:
+  # - using external volumes (have to be created by the developer once though)
+  # - using a bind volume to a common dir (with the return of host specific paths)
+  # - run a local artifact proxy
   maven-cache:
+  npm-cache:
+
 
 services:
   app:
@@ -20,8 +28,9 @@ services:
 
     volumes:
       - ../..:/workspaces:cached
-      # cache the M
       - maven-cache:/home/vscode/.m2/repository
+      - npm-cache:/home/.npm
+
       
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
