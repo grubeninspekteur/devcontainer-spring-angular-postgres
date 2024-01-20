@@ -10,13 +10,18 @@
 			"nodeGypDependencies": true,
 			"version": "18",
 			"nvmVersion": "latest"
+		},
+		"ghcr.io/devcontainers-contrib/features/angular-cli:2": {
+			"version": "17.0.6"
 		}
 	},
+	// see https://github.com/devcontainers-contrib/features/issues/558
+	"overrideFeatureInstallOrder": [
+		"ghcr.io/devcontainers/features/node"
+	  ],
 	
-	// install the Angular CLI, and install or upgrade schema after start
-	// unlike the Maven repository volume, we did not specify a volume for the global node cache. The download time on each start demonstrates why you may want to create a volume for your
-	// package managers. However, volumes stick around after you delete a container, so developers should remove volumes with `docker volume prune --all` after leaving a project.
-	"postStartCommand": "npm install -g @angular/cli@17.0.6 && mvn -f backend/pom.xml flyway:migrate",
+	// install or upgrade schema after start, install node dependencies
+	"postStartCommand": "mvn -f backend/pom.xml flyway:migrate && cd frontend && npm install",
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// This can be used to network with other containers or with the host.

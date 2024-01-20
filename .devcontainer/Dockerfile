@@ -12,6 +12,9 @@ RUN if [ "${INSTALL_MAVEN}" = "true" ]; then su vscode -c "umask 0002 && . /usr/
 # allow Maven to access mounted volume for repository cache
 RUN su vscode -c "mkdir -p /home/vscode/.m2/repository"
 
+# allow npm to access mounted volume for cache
+RUN su vscode -c "mkdir -p /home/vscode/.npm"
+
 # [Optional] Uncomment this section to install additional OS packages.
 # RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 #     && apt-get -y install --no-install-recommends <your-package-list-here>
